@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/siddontang/ledisdb/ledis"
@@ -33,6 +34,12 @@ func (cmd *Command) Execute(ledisInfo *LedisInfo) error {
 	}
 	if strings.HasPrefix(text, "get") {
 		return cmd.runGet(ledisInfo)
+	}
+	if strings.HasPrefix(text, "llen") {
+		return cmd.runLlen(ledisInfo)
+	}
+	if strings.HasPrefix(text, "lrange") {
+		return cmd.runLrange(ledisInfo)
 	}
 
 	return fmt.Errorf("unknown command: %s\n", cmd.Text)
@@ -97,5 +104,46 @@ func (cmd *Command) runGet(ledisInfo *LedisInfo) error {
 		return err
 	}
 	fmt.Printf("%s\n", val)
+	return nil
+}
+
+func (cmd *Command) runLlen(ledisInfo *LedisInfo) error {
+	val, err := ledisInfo.Db.LLen([]byte(cmd.query))
+	if err != nil {
+		return err
+	}
+	fmt.Printf("%d\n", val)
+	return nil
+}
+
+func (cmd *Command) runLrange(ledisInfo *LedisInfo) error {
+	start := int32(0)
+	end := int32(0)
+
+	parts := strings.Split(cmd.query, " ")
+	if len(parts) == 3 {
+		s, err := strconv.Atoi(parts[1])
+		if err != nil {
+			return err
+		}
+		start = int32(s)
+		e, err := strconv.Atoi(parts[2])
+		if err != nil {
+			return err
+		}
+		end = int32(e)
+	} else {
+		return fmt.Errorf("command should have 3 parts (these are single space delimited)")
+	}
+
+	vals, err := ledisInfo.Db.LRange([]byte(parts[0]), start, end)
+	if err != nil {
+		return err
+	}
+
+	for _, val := range vals {
+		fmt.Printf("%s\n", val)
+	}
+
 	return nil
 }
