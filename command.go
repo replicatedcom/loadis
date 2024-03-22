@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ledisdb/ledisdb/ledis"
+	"github.com/siddontang/ledisdb/ledis"
 )
 
 type Command struct {

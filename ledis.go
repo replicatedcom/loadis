@@ -4,8 +4,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ledisdb/ledisdb/config"
-	"github.com/ledisdb/ledisdb/ledis"
+	"github.com/siddontang/ledisdb/config"
+	"github.com/siddontang/ledisdb/ledis"
 )
 
 type LedisInfo struct {
