@@ -3,7 +3,6 @@
 ## Runnins
 
 ```bash
-make docker shell
 make build
 ./bin/loadis <ledis dump filename>
 ```

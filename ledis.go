@@ -58,7 +58,7 @@ func (l *LedisInfo) GetKeyList(dataType ledis.DataType) ([]string, error) {
 	result := []string{}
 
 	lastKey = nil
-	for true {
+	for {
 		keyBatch, err := l.Db.Scan(dataType, lastKey, batchSize, false, "")
 		if err != nil {
 			return nil, err

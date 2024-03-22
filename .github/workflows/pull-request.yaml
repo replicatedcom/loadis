@@ -1,0 +1,37 @@
+name: Pull request
+on:
+  - pull_request
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  sanitize:
+    name: Sanitize
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.0"
+      - name: Go vet
+        run: |
+          make vet
+      - name: Lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.54
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.0"
+      - name: Build
+        run: |
+          make build
