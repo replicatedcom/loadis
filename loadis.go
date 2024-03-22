@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 )
@@ -17,7 +16,7 @@ func main() {
 	filename := os.Args[1]
 	fmt.Printf("Loading file %q\n", filename)
 
-	dirname, err := ioutil.TempDir(".", "tmpledis")
+	dirname, err := os.MkdirTemp(".", "tmpledis")
 	if err != nil {
 		fmt.Printf("Failed to create temp dir: %v\n", err)
 		os.Exit(1)
