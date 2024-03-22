@@ -21,3 +21,6 @@ shell:
 	docker run --rm -it -P --name loadis \
 		-v "`pwd`:/go/src/github.com/replicatedcom/loadis" \
 		loadis
+
+vet:
+	go vet ./...
